@@ -9,6 +9,8 @@ declare const WebViewer: any;
 })
 export class DrawPanelComponent implements OnInit, AfterViewInit {
 
+  private lastUpdatedDateAnnotation: any;
+
   @ViewChild('viewer', {static: false}) viewer: ElementRef;
   wvInstance: any;
 
@@ -34,10 +36,40 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
       const annotManager = instance.annotManager;
-      annotManager.on('annotationChanged', function() {
-        console.log('annotation changed');
+      annotManager.on('annotationChanged', () => {
+        if (this.lastUpdatedDateAnnotation) {
+          annotManager.deleteAnnotation(this.lastUpdatedDateAnnotation);
+          this.lastUpdatedDateAnnotation = undefined;
+        }
+
+        const Annotations = instance.Annotations;
+        // https://www.pdftron.com/api/web/Annotations.html
+        this.lastUpdatedDateAnnotation = new Annotations.FreeTextAnnotation();
+        this.lastUpdatedDateAnnotation.PageNumber = 1;
+        this.lastUpdatedDateAnnotation.X = 0;
+        this.lastUpdatedDateAnnotation.Y = 0;
+        this.lastUpdatedDateAnnotation.setWidth(300);
+        this.lastUpdatedDateAnnotation.setHeight(300);
+        this.lastUpdatedDateAnnotation.setContents(`Last updated: ${new Date()}`);
+        this.lastUpdatedDateAnnotation.FillColor = new Annotations.Color(0, 255, 255);
+        this.lastUpdatedDateAnnotation.FontSize = '12pt';
+
+        annotManager.addAnnotation(this.lastUpdatedDateAnnotation);
+        annotManager.redrawAnnotation(this.lastUpdatedDateAnnotation);
       });
     })
+  }
+
+  onSave() {
+    // const docViewer = this.wvInstance.docViewer;
+    // const doc = docViewer.getDocument();
+
+    // doc.getFileData().then(function(data) {
+    //   var arr = new Uint8Array(data);
+    //   var blob = new Blob([arr], { type: 'application/pdf' });
+    //   var url= window.URL.createObjectURL(blob);
+    //   window.open(url);
+    // });
   }
 
   wvDocumentLoadedHandler(): void {
