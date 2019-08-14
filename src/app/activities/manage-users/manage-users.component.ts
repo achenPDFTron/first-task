@@ -12,6 +12,6 @@ export class ManageUsersComponent {
   }
 
   onUserNameClicked(mockUserName) {
-    this.router.navigate(['/user', mockUserName]);
+    this.router.navigate(['/users', mockUserName]);
   }
 }

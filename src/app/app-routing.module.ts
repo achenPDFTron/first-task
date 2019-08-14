@@ -8,7 +8,7 @@ import { ManageDrawingsComponent } from './activities/manage-drawings/manage-dra
 
 const routes: Routes = [
   { path: 'users', component: ManageUsersComponent },
-  { path: 'user/:id', component: ManageDrawingsComponent },
+  { path: 'users/:id', component: ManageDrawingsComponent },
   { path: '',   redirectTo: '/users', pathMatch: 'full' }
 ];
 
