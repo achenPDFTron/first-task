@@ -21,7 +21,7 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
       // TODO make this path an input
       path: '../assets/webviewer/',
       // TODO make initial doc an input
-      initialDoc: '../assets/webviewer-demo-annotated.pdf'
+      initialDoc: '../assets/lorem-ipsum.pdf'
     }, this.viewer.nativeElement).then(instance => {
       // Disable all tools
       instance.disableTools();
@@ -33,17 +33,6 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
       instance.openElement('notesPanel');
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
-      // or listen to events from the viewer element
-      // this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
-      //   const [ pageNumber ] = e.detail;
-      // });
-
-      // or from the docViewer instance
-      // instance.docViewer.on('annotationsLoaded', () => {
-
-      // });
-
-      // instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
       const annotManager = instance.annotManager;
       annotManager.on('annotationChanged', function() {
         console.log('annotation changed');
@@ -56,17 +45,17 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
     const docViewer = this.wvInstance;
     const annotManager = this.wvInstance.annotManager;
     // and access classes defined in the WebViewer iframe
-    const { Annotations } = this.wvInstance;
-    const rectangle = new Annotations.RectangleAnnotation();
-    rectangle.PageNumber = 1;
-    rectangle.X = 100;
-    rectangle.Y = 100;
-    rectangle.Width = 250;
-    rectangle.Height = 250;
-    rectangle.StrokeThickness = 5;
-    rectangle.Author = annotManager.getCurrentUser();
-    annotManager.addAnnotation(rectangle);
-    annotManager.drawAnnotations(rectangle.PageNumber);
+    // const { Annotations } = this.wvInstance;
+    // const rectangle = new Annotations.RectangleAnnotation();
+    // rectangle.PageNumber = 1;
+    // rectangle.X = 100;
+    // rectangle.Y = 100;
+    // rectangle.Width = 250;
+    // rectangle.Height = 250;
+    // rectangle.StrokeThickness = 5;
+    // rectangle.Author = annotManager.getCurrentUser();
+    // annotManager.addAnnotation(rectangle);
+    // annotManager.drawAnnotations(rectangle.PageNumber);
     // see https://www.pdftron.com/api/web/WebViewer.html for the full list of low-level APIs
   }
 
