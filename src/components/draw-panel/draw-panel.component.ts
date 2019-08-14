@@ -17,12 +17,16 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log('in view init');
     WebViewer({
       // TODO make this path an input
       path: '../assets/webviewer/',
+      // TODO make initial doc an input
       initialDoc: '../assets/webviewer-demo-annotated.pdf'
     }, this.viewer.nativeElement).then(instance => {
+      // Disable all tools
+      instance.disableTools();
+      // Only enable free hand draw tool according to specs
+      instance.enableTools(['AnnotationCreateFreeHand']);
       this.wvInstance = instance;
 
       // now you can access APIs through this.webviewer.getInstance()
@@ -30,17 +34,20 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
       // or listen to events from the viewer element
-      this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
-        const [ pageNumber ] = e.detail;
-        console.log(`Current page is ${pageNumber}`);
-      });
+      // this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
+      //   const [ pageNumber ] = e.detail;
+      // });
 
       // or from the docViewer instance
-      instance.docViewer.on('annotationsLoaded', () => {
-        console.log('annotations loaded');
-      });
+      // instance.docViewer.on('annotationsLoaded', () => {
 
-      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
+      // });
+
+      // instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
+      const annotManager = instance.annotManager;
+      annotManager.on('annotationChanged', function() {
+        console.log('annotation changed');
+      });
     })
   }
 
