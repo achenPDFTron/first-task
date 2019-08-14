@@ -9,7 +9,7 @@ declare const WebViewer: any;
 })
 export class DrawPanelComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('viewer', {static: false}) viewer: ElementRef;
+  @ViewChild('viewer', {static: true}) viewer: ElementRef;
   wvInstance: any;
 
   ngOnInit(): void {
@@ -17,30 +17,32 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    WebViewer({
-      // TODO make this path an input
-      path: '../../../../node_modules/@pdftron',
-      initialDoc: './webviewer-demo-annotated.pdf'
-    }, this.viewer.nativeElement).then(instance => {
-      this.wvInstance = instance;
+    console.log('in view init');
+    WebViewer({}, this.viewer.nativeElement);
+    // WebViewer({
+    //   // TODO make this path an input
+    //   path: '../../lib',
+    //   initialDoc: './webviewer-demo-annotated.pdf'
+    // }, this.viewer.nativeElement).then(instance => {
+    //   this.wvInstance = instance;
 
-      // now you can access APIs through this.webviewer.getInstance()
-      instance.openElement('notesPanel');
-      // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
+    //   // now you can access APIs through this.webviewer.getInstance()
+    //   instance.openElement('notesPanel');
+    //   // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
-      // or listen to events from the viewer element
-      this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
-        const [ pageNumber ] = e.detail;
-        console.log(`Current page is ${pageNumber}`);
-      });
+    //   // or listen to events from the viewer element
+    //   this.viewer.nativeElement.addEventListener('pageChanged', (e) => {
+    //     const [ pageNumber ] = e.detail;
+    //     console.log(`Current page is ${pageNumber}`);
+    //   });
 
-      // or from the docViewer instance
-      instance.docViewer.on('annotationsLoaded', () => {
-        console.log('annotations loaded');
-      });
+    //   // or from the docViewer instance
+    //   instance.docViewer.on('annotationsLoaded', () => {
+    //     console.log('annotations loaded');
+    //   });
 
-      instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
-    })
+    //   // instance.docViewer.on('documentLoaded', this.wvDocumentLoadedHandler)
+    // })
   }
 
   wvDocumentLoadedHandler(): void {

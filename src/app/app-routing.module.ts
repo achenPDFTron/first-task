@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { MockLoginPageComponent } from 'src/components/mock-login-page/mock-login-page.component';
-import { DrawPanelComponent } from 'src/components/draw-panel/draw-panel.component';
-import { ManageUsersComponent } from './activities/manage-users/manage-users.component';
+import { RouterModule, Routes } from '@angular/router';
 import { ManageDrawingsComponent } from './activities/manage-drawings/manage-drawings.component';
+import { ManageUsersComponent } from './activities/manage-users/manage-users.component';
 
 
 const routes: Routes = [

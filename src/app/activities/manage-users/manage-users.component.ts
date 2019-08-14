@@ -7,11 +7,11 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
   styleUrls: ['./manage-users.component.scss']
 })
 export class ManageUsersComponent {
-  constructor(private router: Router) {
+  // constructor(private router: Router) {
 
-  }
+  // }
 
   onUserNameClicked(mockUserName) {
-    this.router.navigate(['/users', mockUserName]);
+    // this.router.navigate(['/users', mockUserName]);
   }
 }

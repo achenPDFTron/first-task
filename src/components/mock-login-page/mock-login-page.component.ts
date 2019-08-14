@@ -1,5 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'mock-login-page',
@@ -12,12 +11,11 @@ export class MockLoginPageComponent {
   @Output()
   userNameClicked = new EventEmitter<string>();
 
-  constructor(private router: Router) {
+  constructor() {
 
   }
 
   onUserNameClicked(mockUserName) {
     this.userNameClicked.emit(mockUserName);
-    // this.router.navigate(['/user', mockUserName]);
   }
 }

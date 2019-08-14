@@ -28,20 +28,15 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "./node_modules/@pdftron/",
-                "output": "./src/assets/@pdftron/"
-              },
-              {
-                "glob": "**/*",
-                "input": "./node_modules/@pdftron/",
-                "output": "./src/libs/"
+                "input": "./src/lib",
+                "output": "./assets/webviewer/"
               }
             ],
             "styles": [
               "src/styles.scss"
             ],
             "scripts": [
-              "./node_modules/@pdftron/webviewer.min.js"
+              "src/lib/webviewer.min.js"
             ]
           },
           "configurations": {

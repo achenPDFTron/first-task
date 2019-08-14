@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { MockLoginPageComponent } from 'src/components/mock-login-page/mock-login-page.component';
 import { CommonModule } from '@angular/common';
-import { ManageDrawingsComponent } from './manage-drawings.component';
+import { NgModule } from '@angular/core';
 import { DrawPanelComponent } from 'src/components/draw-panel/draw-panel.component';
+import { ManageDrawingsComponent } from './manage-drawings.component';
+import { BrowserModule } from '@angular/platform-browser';
 
 @NgModule({
   declarations: [
@@ -15,6 +15,7 @@ import { DrawPanelComponent } from 'src/components/draw-panel/draw-panel.compone
   ],
   imports: [
     CommonModule,
+    BrowserModule
   ]
 })
 export class ManageDrawingModule { }

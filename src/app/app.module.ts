@@ -1,13 +1,10 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { MockLoginPageComponent } from 'src/components/mock-login-page/mock-login-page.component';
 import { CommonModule } from '@angular/common';
-import { DrawPanelComponent } from 'src/components/draw-panel/draw-panel.component';
-import { ManageUsersModule } from './activities/manage-users/manage-users.module';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { ManageDrawingModule } from './activities/manage-drawings/manage-drawings.module';
+import { ManageUsersModule } from './activities/manage-users/manage-users.module';
+import { AppComponent } from './app.component';
+
 
 @NgModule({
   declarations: [
@@ -16,7 +13,7 @@ import { ManageDrawingModule } from './activities/manage-drawings/manage-drawing
   imports: [
     CommonModule,
     BrowserModule,
-    AppRoutingModule,
+    // AppRoutingModule,
     ManageUsersModule,
     ManageDrawingModule
   ],
