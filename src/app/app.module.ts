@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ManageDrawingModule } from './activities/manage-drawings/manage-drawings.module';
 import { ManageUsersModule } from './activities/manage-users/manage-users.module';
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 
 
 @NgModule({
@@ -13,7 +14,7 @@ import { AppComponent } from './app.component';
   imports: [
     CommonModule,
     BrowserModule,
-    // AppRoutingModule,
+    AppRoutingModule,
     ManageUsersModule,
     ManageDrawingModule
   ],
