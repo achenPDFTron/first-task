@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { MockLoginPageComponent } from 'src/components/mock-login-page/mock-login-page.component';
 import { CommonModule } from '@angular/common';
-import { ManagerDrawingsComponent } from './mange-drawings.component';
+import { ManageDrawingsComponent } from './manage-drawings.component';
 import { DrawPanelComponent } from 'src/components/draw-panel/draw-panel.component';
 
 @NgModule({
   declarations: [
-    ManagerDrawingsComponent,
+    ManageDrawingsComponent,
     DrawPanelComponent
   ],
   exports: [
-    ManagerDrawingsComponent,
+    ManageDrawingsComponent,
     DrawPanelComponent
   ],
   imports: [

@@ -6,7 +6,7 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
   templateUrl: './manage-drawings.component.html',
   styleUrls: ['./manage-drawings.component.scss']
 })
-export class ManagerDrawingsComponent {
+export class ManageDrawingsComponent {
   constructor(private router: Router) {
 
   }

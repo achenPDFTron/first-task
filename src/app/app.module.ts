@@ -7,7 +7,7 @@ import { MockLoginPageComponent } from 'src/components/mock-login-page/mock-logi
 import { CommonModule } from '@angular/common';
 import { DrawPanelComponent } from 'src/components/draw-panel/draw-panel.component';
 import { ManageUsersModule } from './activities/manage-users/manage-users.module';
-import { ManageDrawingModule } from './activities/mange-drawings/mange-drawings.module';
+import { ManageDrawingModule } from './activities/manage-drawings/manage-drawings.module';
 
 @NgModule({
   declarations: [

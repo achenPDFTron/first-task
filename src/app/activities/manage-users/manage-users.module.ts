@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { MockLoginPageComponent } from 'src/components/mock-login-page/mock-login-page.component';
 import { CommonModule } from '@angular/common';
-import { ManagerUsersComponent } from './manage-users.component';
+import { ManageUsersComponent } from './manage-users.component';
 
 @NgModule({
   declarations: [
-    ManagerUsersComponent,
+    ManageUsersComponent,
     MockLoginPageComponent
   ],
   exports: [
-    ManagerUsersComponent,
+    ManageUsersComponent,
     MockLoginPageComponent
   ],
   imports: [
