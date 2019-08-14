@@ -1,0 +1,4 @@
+<h1>Please select a user</h1>
+<ul *ngFor="let mockUserName of mockUserNames">
+    <li (click)="onUserNameClicked(mockUserName)" style="cursor: pointer;">{{mockUserName}}</li>
+</ul>
