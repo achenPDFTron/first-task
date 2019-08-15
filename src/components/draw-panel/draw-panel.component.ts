@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnInit, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
 
 declare const WebViewer: any;
 
@@ -9,10 +9,13 @@ declare const WebViewer: any;
 })
 export class DrawPanelComponent implements OnInit, AfterViewInit {
 
-  private lastUpdatedDateAnnotation: any;
+  @Output()
+  savePressed = new EventEmitter<Blob>();
 
   @ViewChild('viewer', {static: false}) viewer: ElementRef;
   wvInstance: any;
+
+  private lastUpdatedDateAnnotation: any;
 
   ngOnInit(): void {
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
@@ -27,6 +30,7 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
     }, this.viewer.nativeElement).then(instance => {
       // Disable all tools
       instance.disableTools();
+      instance.disableNotesPanel();
       // Only enable free hand draw tool according to specs
       instance.enableTools(['AnnotationCreateFreeHand']);
       this.wvInstance = instance;
@@ -61,15 +65,14 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
   }
 
   onSave() {
-    // const docViewer = this.wvInstance.docViewer;
-    // const doc = docViewer.getDocument();
+    const docViewer = this.wvInstance.docViewer;
+    const doc = docViewer.getDocument();
 
-    // doc.getFileData().then(function(data) {
-    //   var arr = new Uint8Array(data);
-    //   var blob = new Blob([arr], { type: 'application/pdf' });
-    //   var url= window.URL.createObjectURL(blob);
-    //   window.open(url);
-    // });
+    doc.getFileData().then((data) => {
+      const arr = new Uint8Array(data);
+      const blob = new Blob([arr], { type: 'application/pdf' });
+      this.savePressed.emit(blob);
+    });
   }
 
   wvDocumentLoadedHandler(): void {
