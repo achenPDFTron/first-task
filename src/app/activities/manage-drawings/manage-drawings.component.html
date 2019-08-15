@@ -1,1 +1,4 @@
-<draw-panel (savePressed)="onSavePressed($event)"></draw-panel>
+<draw-panel
+  [initialDocPath]="pdfDownloadUrl"
+  (savePressed)="onSavePressed($event)">
+</draw-panel>

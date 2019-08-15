@@ -1,13 +1,18 @@
-import { Component, ElementRef, ViewChild, OnInit, AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, AfterViewInit, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 declare const WebViewer: any;
+
+// https://www.pdftron.com/documentation/web/guides/wv-inside/#loading-webviewer-from-another-domain
 
 @Component({
   selector: 'draw-panel',
   templateUrl: './draw-panel.component.html',
   styleUrls: ['./draw-panel.component.scss']
 })
-export class DrawPanelComponent implements OnInit, AfterViewInit {
+export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
+
+  @Input()
+  initialDocPath: string;
 
   @Output()
   savePressed = new EventEmitter<Blob>();
@@ -17,16 +22,57 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
 
   private lastUpdatedDateAnnotation: any;
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['initialDocPath'] && this.initialDocPath) {
+      if (this.viewer) {
+        this.setUpWebViewer();
+      }
+    }
+  }
+
   ngOnInit(): void {
     this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
   }
 
   ngAfterViewInit(): void {
+    // this.setUpWebViewer();
+  }
+
+  onSave() {
+    const docViewer = this.wvInstance.docViewer;
+    const doc = docViewer.getDocument();
+    // https://www.pdftron.com/documentation/web/guides/get-file-data-with-viewer/
+    doc.getFileData().then((data) => {
+      const arr = new Uint8Array(data);
+      const blob = new Blob([arr], { type: 'application/pdf' });
+      this.savePressed.emit(blob);
+    });
+  }
+
+  wvDocumentLoadedHandler(): void {
+    // you can access docViewer object for low-level APIs
+    const docViewer = this.wvInstance;
+    const annotManager = this.wvInstance.annotManager;
+    // and access classes defined in the WebViewer iframe
+    // const { Annotations } = this.wvInstance;
+    // const rectangle = new Annotations.RectangleAnnotation();
+    // rectangle.PageNumber = 1;
+    // rectangle.X = 100;
+    // rectangle.Y = 100;
+    // rectangle.Width = 250;
+    // rectangle.Height = 250;
+    // rectangle.StrokeThickness = 5;
+    // rectangle.Author = annotManager.getCurrentUser();
+    // annotManager.addAnnotation(rectangle);
+    // annotManager.drawAnnotations(rectangle.PageNumber);
+    // see https://www.pdftron.com/api/web/WebViewer.html for the full list of low-level APIs
+  }
+
+  private setUpWebViewer() {
     WebViewer({
       // TODO make this path an input
       path: '../assets/webviewer/',
-      // TODO make initial doc an input
-      initialDoc: '../assets/lorem-ipsum.pdf'
+      initialDoc: this.initialDocPath
     }, this.viewer.nativeElement).then(instance => {
       // Disable all tools
       instance.disableTools();
@@ -64,36 +110,6 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
         annotManager.redrawAnnotation(this.lastUpdatedDateAnnotation);
       });
     })
-  }
-
-  onSave() {
-    const docViewer = this.wvInstance.docViewer;
-    const doc = docViewer.getDocument();
-    // https://www.pdftron.com/documentation/web/guides/get-file-data-with-viewer/
-    doc.getFileData().then((data) => {
-      const arr = new Uint8Array(data);
-      const blob = new Blob([arr], { type: 'application/pdf' });
-      this.savePressed.emit(blob);
-    });
-  }
-
-  wvDocumentLoadedHandler(): void {
-    // you can access docViewer object for low-level APIs
-    const docViewer = this.wvInstance;
-    const annotManager = this.wvInstance.annotManager;
-    // and access classes defined in the WebViewer iframe
-    // const { Annotations } = this.wvInstance;
-    // const rectangle = new Annotations.RectangleAnnotation();
-    // rectangle.PageNumber = 1;
-    // rectangle.X = 100;
-    // rectangle.Y = 100;
-    // rectangle.Width = 250;
-    // rectangle.Height = 250;
-    // rectangle.StrokeThickness = 5;
-    // rectangle.Author = annotManager.getCurrentUser();
-    // annotManager.addAnnotation(rectangle);
-    // annotManager.drawAnnotations(rectangle.PageNumber);
-    // see https://www.pdftron.com/api/web/WebViewer.html for the full list of low-level APIs
   }
 
 }
