@@ -31,7 +31,7 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.wvDocumentLoadedHandler = this.wvDocumentLoadedHandler.bind(this);
+
   }
 
   ngAfterViewInit(): void {
@@ -42,32 +42,18 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
     // https://www.pdftron.com/documentation/web/guides/features/basics/save?searchTerm=save
     // https://www.pdftron.com/documentation/web/guides/features/basics/save?searchTerm=save#a-document
     const docViewer = this.wvInstance.docViewer;
+
+    const annotManager = this.wvInstance.annotManager;
+
     const doc = docViewer.getDocument();
     // https://www.pdftron.com/documentation/web/guides/get-file-data-with-viewer/
-    // doc.getPDFDoc()
-    const data = await doc.getFileData();
+    const data = await doc.getFileData({
+      // need this so that we can save annotations as well
+      xfdfString: annotManager.exportAnnotations()
+    });
     const arr = new Uint8Array(data);
     const blob = new Blob([arr], { type: 'application/pdf' });
     this.savePressed.emit(blob);
-  }
-
-  wvDocumentLoadedHandler(): void {
-    // you can access docViewer object for low-level APIs
-    const docViewer = this.wvInstance;
-    const annotManager = this.wvInstance.annotManager;
-    // and access classes defined in the WebViewer iframe
-    // const { Annotations } = this.wvInstance;
-    // const rectangle = new Annotations.RectangleAnnotation();
-    // rectangle.PageNumber = 1;
-    // rectangle.X = 100;
-    // rectangle.Y = 100;
-    // rectangle.Width = 250;
-    // rectangle.Height = 250;
-    // rectangle.StrokeThickness = 5;
-    // rectangle.Author = annotManager.getCurrentUser();
-    // annotManager.addAnnotation(rectangle);
-    // annotManager.drawAnnotations(rectangle.PageNumber);
-    // see https://www.pdftron.com/api/web/WebViewer.html for the full list of low-level APIs
   }
 
   private setUpWebViewer() {
