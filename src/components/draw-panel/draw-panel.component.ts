@@ -22,6 +22,8 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
 
   private lastUpdatedDateAnnotation: any;
 
+  private isNotFirst = false;
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['initialDocPath'] && this.initialDocPath) {
       if (this.viewer) {
@@ -94,15 +96,16 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
         this.lastUpdatedDateAnnotation.setContents(`Last updated: N/A`);
         this.lastUpdatedDateAnnotation.FillColor = new Annotations.Color(0, 255, 255);
         this.lastUpdatedDateAnnotation.FontSize = '12pt';
+        this.lastUpdatedDateAnnotation.ReadOnly = true;
 
         annotManager.addAnnotation(this.lastUpdatedDateAnnotation);
         // annotManager.redrawAnnotation(this.lastUpdatedDateAnnotation);
       });
       annotManager.on('annotationChanged', (e) => {
-        console.log(e);
-        if (this.lastUpdatedDateAnnotation) {
+        if (this.lastUpdatedDateAnnotation && this.isNotFirst) {
           this.lastUpdatedDateAnnotation.setContents(`Last updated: ${new Date()}`);
         }
+        this.isNotFirst = true;
       });
     })
   }
