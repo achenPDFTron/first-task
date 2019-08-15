@@ -93,58 +93,47 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
 
         const Annotations = instance.Annotations;
         // https://www.pdftron.com/api/web/Annotations.html
-        this.lastUpdatedDateAnnotation = new Annotations.FreeTextAnnotation();
-        this.lastUpdatedDateAnnotation.Id = LAST_UPDATED_ANNOTATION_ID;
-        this.lastUpdatedDateAnnotation.PageNumber = 1;
 
-        // Place it in bottom right corner
-        const pageHeight = docViewer.getPageHeight(0);
-        const pageWidth = docViewer.getPageWidth(0);
-        this.lastUpdatedDateAnnotation.X = pageWidth - 450;
-        this.lastUpdatedDateAnnotation.Y = pageHeight - 25;
-        this.lastUpdatedDateAnnotation.setWidth(450);
-        this.lastUpdatedDateAnnotation.setHeight(25);
+        // console.log(annotManager.getAnnotationById(LAST_UPDATED_ANNOTATION_ID));
+        const foundAnnotation = annotManager.getAnnotationById(LAST_UPDATED_ANNOTATION_ID);
+        if (foundAnnotation) {
+          this.lastUpdatedDateAnnotation = foundAnnotation;
+        }
+        else {
+          this.lastUpdatedDateAnnotation = new Annotations.FreeTextAnnotation();
+          this.lastUpdatedDateAnnotation.Id = LAST_UPDATED_ANNOTATION_ID;
+          this.lastUpdatedDateAnnotation.PageNumber = 1;
 
-        this.lastUpdatedDateAnnotation.setPadding(new Annotations.Rect(0, 0, 0, 0));
-        this.lastUpdatedDateAnnotation.setContents(`Last updated: N/A`);
-        this.lastUpdatedDateAnnotation.FillColor = new Annotations.Color(0, 255, 255);
-        this.lastUpdatedDateAnnotation.FontSize = '12pt';
-        // this.lastUpdatedDateAnnotation.ReadOnly = true;
+          // Place it in bottom right corner
+          const pageHeight = docViewer.getPageHeight(0);
+          const pageWidth = docViewer.getPageWidth(0);
+          this.lastUpdatedDateAnnotation.X = pageWidth - 450;
+          this.lastUpdatedDateAnnotation.Y = pageHeight - 25;
+          this.lastUpdatedDateAnnotation.setWidth(450);
+          this.lastUpdatedDateAnnotation.setHeight(25);
 
-        annotManager.addAnnotation(this.lastUpdatedDateAnnotation);
-        annotManager.redrawAnnotation(this.lastUpdatedDateAnnotation);
+          this.lastUpdatedDateAnnotation.setPadding(new Annotations.Rect(0, 0, 0, 0));
+          this.lastUpdatedDateAnnotation.setContents(`Last updated: N/A`);
+          this.lastUpdatedDateAnnotation.FillColor = new Annotations.Color(0, 255, 255);
+          this.lastUpdatedDateAnnotation.FontSize = '12pt';
 
+          this.lastUpdatedDateAnnotation.NoMove = true;
+          this.lastUpdatedDateAnnotation.NoResize = true;
+          this.lastUpdatedDateAnnotation.Locked = true;
+          this.lastUpdatedDateAnnotation.ReadOnly = true;
+  
+          annotManager.addAnnotation(this.lastUpdatedDateAnnotation);
+          annotManager.redrawAnnotation(this.lastUpdatedDateAnnotation);
+        }
         this.annotationsLoaded = true;
-      });
-
-      docViewer.on('documentLoaded', () => {
-        // if (this.lastUpdatedDateAnnotation) {
-        //   annotManager.deleteAnnotation(this.lastUpdatedDateAnnotation);
-        //   this.lastUpdatedDateAnnotation = undefined;
-        // }
-
-        // const Annotations = instance.Annotations;
-        // // https://www.pdftron.com/api/web/Annotations.html
-        // this.lastUpdatedDateAnnotation = new Annotations.FreeTextAnnotation();
-        // this.lastUpdatedDateAnnotation.Id = LAST_UPDATED_ANNOTATION_ID;
-        // this.lastUpdatedDateAnnotation.PageNumber = 1;
-        // this.lastUpdatedDateAnnotation.X = 0;
-        // this.lastUpdatedDateAnnotation.Y = 0;
-        // this.lastUpdatedDateAnnotation.setWidth(450);
-        // this.lastUpdatedDateAnnotation.setHeight(25);
-        // this.lastUpdatedDateAnnotation.setPadding(new Annotations.Rect(0, 0, 0, 0));
-        // this.lastUpdatedDateAnnotation.setContents(`Last updated: N/A`);
-        // this.lastUpdatedDateAnnotation.FillColor = new Annotations.Color(0, 255, 255);
-        // this.lastUpdatedDateAnnotation.FontSize = '12pt';
-        // this.lastUpdatedDateAnnotation.ReadOnly = true;
-
-        // annotManager.addAnnotation(this.lastUpdatedDateAnnotation);
-        // annotManager.redrawAnnotation(this.lastUpdatedDateAnnotation);
       });
       annotManager.on('annotationChanged', (event, annotations, action) => {
         if (this.annotationsLoaded) {
           if (this.lastUpdatedDateAnnotation) {
+            this.lastUpdatedDateAnnotation.ReadOnly = false;
             this.lastUpdatedDateAnnotation.setContents(`Last updated: ${new Date()}`);
+            this.lastUpdatedDateAnnotation.ReadOnly = true;
+            annotManager.redrawAnnotation(this.lastUpdatedDateAnnotation);
           }
         }
       });
