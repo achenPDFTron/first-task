@@ -7,7 +7,11 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
   styleUrls: ['./manage-drawings.component.scss']
 })
 export class ManageDrawingsComponent {
-  // constructor(private router: Router) {
+  constructor(private router: Router) {
 
-  // }
+  }
+
+  onSavePressed(blob: Blob) {
+    console.log(blob);
+  }
 }

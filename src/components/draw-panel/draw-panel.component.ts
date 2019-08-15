@@ -57,6 +57,8 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
         this.lastUpdatedDateAnnotation.setContents(`Last updated: ${new Date()}`);
         this.lastUpdatedDateAnnotation.FillColor = new Annotations.Color(0, 255, 255);
         this.lastUpdatedDateAnnotation.FontSize = '12pt';
+        // set padding doesn't quite work. max call stack exceeded
+        // this.lastUpdatedDateAnnotation.setPadding(new Annotations.Rect(0, 0, 0, 0));
 
         annotManager.addAnnotation(this.lastUpdatedDateAnnotation);
         annotManager.redrawAnnotation(this.lastUpdatedDateAnnotation);
@@ -67,7 +69,7 @@ export class DrawPanelComponent implements OnInit, AfterViewInit {
   onSave() {
     const docViewer = this.wvInstance.docViewer;
     const doc = docViewer.getDocument();
-
+    // https://www.pdftron.com/documentation/web/guides/get-file-data-with-viewer/
     doc.getFileData().then((data) => {
       const arr = new Uint8Array(data);
       const blob = new Blob([arr], { type: 'application/pdf' });
