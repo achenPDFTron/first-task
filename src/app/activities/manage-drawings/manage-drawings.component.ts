@@ -5,8 +5,8 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 
-// const defaultInitialDocRelPath = '../assets/lorem-ipsum.pdf';
-const defaultInitialDocRelPath = '../assets/webviewer-demo-annotated.pdf';
+const defaultInitialDocRelPath = '../assets/lorem-ipsum.pdf';
+// const defaultInitialDocRelPath = '../assets/webviewer-demo-annotated.pdf';
 
 @Component({
   selector: 'manage-drawings',

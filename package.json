@@ -8,6 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "download-webviewer-node-module": "npx @pdftron/webviewer-downloader --webviewerLocation node_modules/@pdftron",
     "download-webviewer": "npx @pdftron/webviewer-downloader --webviewerLocation src/lib"
   },
   "private": true,
