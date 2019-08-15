@@ -3,7 +3,7 @@ import { Component, ElementRef, ViewChild, OnInit, AfterViewInit, Output, EventE
 declare const WebViewer: any;
 
 // https://www.pdftron.com/documentation/web/guides/wv-inside/#loading-webviewer-from-another-domain
-
+// https://www.pdftron.com/api/web/WebViewer.html ; iFrameWindow object
 @Component({
   selector: 'draw-panel',
   templateUrl: './draw-panel.component.html',
@@ -38,15 +38,17 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
     // this.setUpWebViewer();
   }
 
-  onSave() {
+  async onSave() {
+    // https://www.pdftron.com/documentation/web/guides/features/basics/save?searchTerm=save
+    // https://www.pdftron.com/documentation/web/guides/features/basics/save?searchTerm=save#a-document
     const docViewer = this.wvInstance.docViewer;
     const doc = docViewer.getDocument();
     // https://www.pdftron.com/documentation/web/guides/get-file-data-with-viewer/
-    doc.getFileData().then((data) => {
-      const arr = new Uint8Array(data);
-      const blob = new Blob([arr], { type: 'application/pdf' });
-      this.savePressed.emit(blob);
-    });
+    // doc.getPDFDoc()
+    const data = await doc.getFileData();
+    const arr = new Uint8Array(data);
+    const blob = new Blob([arr], { type: 'application/pdf' });
+    this.savePressed.emit(blob);
   }
 
   wvDocumentLoadedHandler(): void {
@@ -86,7 +88,9 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
       const annotManager = instance.annotManager;
-      annotManager.on('annotationChanged', () => {
+      const docViewer = instance.docViewer;
+
+      docViewer.on('documentLoaded', () => {
         if (this.lastUpdatedDateAnnotation) {
           annotManager.deleteAnnotation(this.lastUpdatedDateAnnotation);
           this.lastUpdatedDateAnnotation = undefined;
@@ -98,16 +102,21 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
         this.lastUpdatedDateAnnotation.PageNumber = 1;
         this.lastUpdatedDateAnnotation.X = 0;
         this.lastUpdatedDateAnnotation.Y = 0;
-        this.lastUpdatedDateAnnotation.setWidth(300);
-        this.lastUpdatedDateAnnotation.setHeight(300);
-        this.lastUpdatedDateAnnotation.setContents(`Last updated: ${new Date()}`);
+        this.lastUpdatedDateAnnotation.setWidth(450);
+        this.lastUpdatedDateAnnotation.setHeight(25);
+        this.lastUpdatedDateAnnotation.setPadding(new Annotations.Rect(0, 0, 0, 0));
+        this.lastUpdatedDateAnnotation.setContents(`Last updated: N/A`);
         this.lastUpdatedDateAnnotation.FillColor = new Annotations.Color(0, 255, 255);
         this.lastUpdatedDateAnnotation.FontSize = '12pt';
-        // set padding doesn't quite work. max call stack exceeded
-        // this.lastUpdatedDateAnnotation.setPadding(new Annotations.Rect(0, 0, 0, 0));
 
         annotManager.addAnnotation(this.lastUpdatedDateAnnotation);
-        annotManager.redrawAnnotation(this.lastUpdatedDateAnnotation);
+        // annotManager.redrawAnnotation(this.lastUpdatedDateAnnotation);
+      });
+      annotManager.on('annotationChanged', (e) => {
+        console.log(e);
+        if (this.lastUpdatedDateAnnotation) {
+          this.lastUpdatedDateAnnotation.setContents(`Last updated: ${new Date()}`);
+        }
       });
     })
   }
