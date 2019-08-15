@@ -15,7 +15,7 @@ export class DrawingService {
 
   }
 
-  saveDrawing(userName: string, drawing: Blob) {
+  saveDrawingForUser(userName: string, drawing: Blob) {
     // create a reference to the storage bucket location
     const ref = this.afStorage.ref(userName);
     // the put method creates an AngularFireUploadTask
@@ -23,6 +23,11 @@ export class DrawingService {
     const task = ref.put(drawing);
 
     return task.snapshotChanges();
+  }
+
+  downloadDrawingForUser(userName: string) {
+    const ref = this.afStorage.ref(userName);
+    return ref.getDownloadURL();
   }
 
 }

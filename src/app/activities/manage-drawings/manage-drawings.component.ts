@@ -1,5 +1,5 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router, ParamMap } from '@angular/router';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { DrawingService } from 'src/app/services/drawing.service';
 
 @Component({
@@ -8,16 +8,20 @@ import { DrawingService } from 'src/app/services/drawing.service';
   styleUrls: ['./manage-drawings.component.scss']
 })
 export class ManageDrawingsComponent {
-  constructor(private router: Router,
+  private userName;
+  constructor(
               private drawingService: DrawingService,
               private route: ActivatedRoute) {
+    this.userName = this.route.snapshot.params.id;
+    this.drawingService.downloadDrawingForUser(this.userName)
+    .subscribe(
+      a => console.log(a),
+      b => console.log('error', b)
+    );
 
   }
 
   onSavePressed(drawing: Blob) {
-    // console.log(this.route.snapshot.params.id);
-    // console.log(blob);
-    const userName = this.route.snapshot.params.id;
-    this.drawingService.saveDrawing(userName, drawing);
+    this.drawingService.saveDrawingForUser(this.userName, drawing);
   }
 }
