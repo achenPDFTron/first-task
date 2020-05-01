@@ -57,16 +57,6 @@ export class DrawPanelComponent implements OnChanges, OnInit {
     this.savePressed.emit(blob);
   }
 
-  private doSomething() {
-    const TriangleAnnotation = function() {
-      Annotations.MarkupAnnotation.call(this);
-      this.Subject = 'Triangle';
-    };
-    TriangleAnnotation.prototype = new Annotations.MarkupAnnotation();
-
-    TriangleAnnotation.prototype.elementName = 'triangle';
-  }
-
   private setUpWebViewer() {
     WebViewer({
       // TODO make this path an input
@@ -87,7 +77,7 @@ export class DrawPanelComponent implements OnChanges, OnInit {
       instance.disableTools();
       // instance.disableNotesPanel();
       // Only enable free hand draw tool according to specs
-      // instance.enableTools(['AnnotationCreateFreeHand']);
+      instance.enableTools(['AnnotationCreateFreeHand']);
       this.wvInstance = instance;
 
       // now you can access APIs through this.webviewer.getInstance()

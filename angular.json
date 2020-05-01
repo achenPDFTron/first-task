@@ -28,7 +28,7 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "./src/lib",
+                "input": "node_modules/@pdftron\\webviewer/public",
                 "output": "./assets/webviewer/"
               }
             ],
@@ -36,7 +36,7 @@
               "src/styles.scss"
             ],
             "scripts": [
-              "src/lib/webviewer.min.js"
+              "node_modules/@pdftron\\webviewer/webviewer.min.js"
             ]
           },
           "configurations": {
