@@ -1,6 +1,7 @@
 import { Component, ElementRef, ViewChild, OnInit, AfterViewInit, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
-
-declare const WebViewer: any;
+import { initializeCustomAnnotationClass } from '../../models/some-class';
+// declare const WebViewer: any;
+import WebViewer from '@pdftron/webviewer';
 
 const LAST_UPDATED_ANNOTATION_ID = 'last-updated-annotation';
 
@@ -11,7 +12,7 @@ const LAST_UPDATED_ANNOTATION_ID = 'last-updated-annotation';
   templateUrl: './draw-panel.component.html',
   styleUrls: ['./draw-panel.component.scss']
 })
-export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
+export class DrawPanelComponent implements OnChanges, OnInit {
 
   @Input()
   initialDocPath: string;
@@ -35,16 +36,7 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    const key = 'test';
-    const SEED = 3;
-    const split = key.split('');
-    const numberMap = split.map((c) => { return c.charCodeAt(0); })
-    const seeded = numberMap.map((c) => { return c ^ SEED; });
-
-  }
-
-  ngAfterViewInit(): void {
-    // this.setUpWebViewer();
+    // const a = new TriangleAnnotation();
   }
 
   async onSave() {
@@ -65,21 +57,41 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
     this.savePressed.emit(blob);
   }
 
+  private doSomething() {
+    const TriangleAnnotation = function() {
+      Annotations.MarkupAnnotation.call(this);
+      this.Subject = 'Triangle';
+    };
+    TriangleAnnotation.prototype = new Annotations.MarkupAnnotation();
+
+    TriangleAnnotation.prototype.elementName = 'triangle';
+  }
+
   private setUpWebViewer() {
     WebViewer({
       // TODO make this path an input
       path: '../assets/webviewer/',
       initialDoc: this.initialDocPath
     }, this.viewer.nativeElement).then(instance => {
+      const { Annotations } = instance;
+      const a = initializeCustomAnnotationClass(instance.Annotations);
+      // const TriangleAnnotation = function() {
+      //   Annotations.MarkupAnnotation.call(this);
+      //   this.Subject = 'Triangle';
+      // };
+      // TriangleAnnotation.prototype = new Annotations.MarkupAnnotation();
+
+      // TriangleAnnotation.prototype.elementName = 'triangle';
+
       // Disable all tools
       instance.disableTools();
-      instance.disableNotesPanel();
+      // instance.disableNotesPanel();
       // Only enable free hand draw tool according to specs
-      instance.enableTools(['AnnotationCreateFreeHand']);
+      // instance.enableTools(['AnnotationCreateFreeHand']);
       this.wvInstance = instance;
 
       // now you can access APIs through this.webviewer.getInstance()
-      instance.openElement('notesPanel');
+      instance.openElements(['notesPanel']);
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
       const annotManager = instance.annotManager;
@@ -95,7 +107,7 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
         // https://www.pdftron.com/api/web/Annotations.html
 
         // console.log(annotManager.getAnnotationById(LAST_UPDATED_ANNOTATION_ID));
-        const foundAnnotation = annotManager.getAnnotationById(LAST_UPDATED_ANNOTATION_ID);
+        const foundAnnotation = annotManager.getAnnotationById(LAST_UPDATED_ANNOTATION_ID, []);
         if (foundAnnotation) {
           this.lastUpdatedDateAnnotation = foundAnnotation;
         }
@@ -114,7 +126,7 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
 
           this.lastUpdatedDateAnnotation.setPadding(new Annotations.Rect(0, 0, 0, 0));
           this.lastUpdatedDateAnnotation.setContents(`Last updated: N/A`);
-          this.lastUpdatedDateAnnotation.FillColor = new Annotations.Color(0, 255, 255);
+          this.lastUpdatedDateAnnotation.FillColor = new Annotations.Color(0, 255, 255, 1);
           this.lastUpdatedDateAnnotation.FontSize = '12pt';
 
           this.lastUpdatedDateAnnotation.NoMove = true;
@@ -122,7 +134,7 @@ export class DrawPanelComponent implements OnChanges, OnInit, AfterViewInit {
           this.lastUpdatedDateAnnotation.Locked = true;
           this.lastUpdatedDateAnnotation.ReadOnly = true;
   
-          annotManager.addAnnotation(this.lastUpdatedDateAnnotation);
+          annotManager.addAnnotation(this.lastUpdatedDateAnnotation, true);
           annotManager.redrawAnnotation(this.lastUpdatedDateAnnotation);
         }
         this.annotationsLoaded = true;

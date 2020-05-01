@@ -4,6 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 1234",
+    "start-ie11": "ng serve --port 1234 --configuration es5",
+    "start-no-reload": "ng serve --no-live-reload --port 1234",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -22,9 +24,12 @@
     "@angular/platform-browser": "~8.2.0",
     "@angular/platform-browser-dynamic": "~8.2.0",
     "@angular/router": "~8.2.0",
+    "@pdftron/webviewer": "^6.2.3",
+    "classlist.js": "^1.1.20150312",
     "firebase": "^6.3.5",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
+    "web-animations-js": "^2.3.2",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {

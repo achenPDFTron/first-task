@@ -40,6 +40,9 @@
             ]
           },
           "configurations": {
+            "es5": {
+              "tsConfig": "./tsconfig.es5.json"
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -79,6 +82,9 @@
           "configurations": {
             "production": {
               "browserTarget": "draw-your-face:build:production"
+            },
+            "es5": {
+              "browserTarget": "draw-your-face:build:es5"
             }
           }
         },
