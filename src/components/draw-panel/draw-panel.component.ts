@@ -64,14 +64,6 @@ export class DrawPanelComponent implements OnChanges, OnInit {
       initialDoc: this.initialDocPath
     }, this.viewer.nativeElement).then(instance => {
       const { Annotations } = instance;
-      const a = initializeCustomAnnotationClass(instance.Annotations);
-      // const TriangleAnnotation = function() {
-      //   Annotations.MarkupAnnotation.call(this);
-      //   this.Subject = 'Triangle';
-      // };
-      // TriangleAnnotation.prototype = new Annotations.MarkupAnnotation();
-
-      // TriangleAnnotation.prototype.elementName = 'triangle';
 
       // Disable all tools
       instance.disableTools();
