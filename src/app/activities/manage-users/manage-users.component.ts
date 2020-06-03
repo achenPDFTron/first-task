@@ -11,6 +11,10 @@ export class ManageUsersComponent {
 
   }
 
+  goCompareDocuments() {
+    this.router.navigate(['/compare-docs']);
+  }
+
   onUserNameClicked(mockUserName) {
     this.router.navigate(['/users', mockUserName]);
   }

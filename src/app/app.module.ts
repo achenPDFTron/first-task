@@ -10,6 +10,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { ManageComparingDocumentsModule } from './activities/manage-comparing-documents/manage-comparing-documents.module';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
     BrowserModule,
     AppRoutingModule,
     ManageUsersModule,
+    ManageComparingDocumentsModule,
     ManageDrawingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features

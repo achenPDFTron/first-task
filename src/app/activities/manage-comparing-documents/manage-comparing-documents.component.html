@@ -1,0 +1,10 @@
+<!--TODO should put this into a component and make that component reusuable-->
+<input type="file"
+           (change)="getPDFDocFromUpload($event.target.files[0], 0)">
+<input type="file"
+           (change)="getPDFDocFromUpload($event.target.files[0], 1)">
+<div class="container">
+  <div #left class="left viewer"></div>
+  <div #middle class="middle viewer"></div>
+  <div #right class="right viewer"></div>
+</div>

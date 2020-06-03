@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, OnInit, AfterViewInit, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { initializeCustomAnnotationClass } from '../../models/some-class';
+import { saveAs } from 'file-saver';
 // declare const WebViewer: any;
 import WebViewer from '@pdftron/webviewer';
 
@@ -58,12 +59,30 @@ export class DrawPanelComponent implements OnChanges, OnInit {
   }
 
   private setUpWebViewer() {
+    // const blah = {} as WebViewerOptions;
     WebViewer({
       // TODO make this path an input
       path: '../assets/webviewer/',
-      initialDoc: this.initialDocPath
+      initialDoc: this.initialDocPath,
+      fullAPI: true,
     }, this.viewer.nativeElement).then(instance => {
-      const { Annotations } = instance;
+      const { Annotations, PDFNet, docViewer } = instance;
+
+      docViewer.on('annotationsLoaded', async() => {
+        (PDFNet).runWithCleanup(async() => {
+          const newDoc = await PDFNet.PDFDoc.create();
+          const page_num = docViewer.getDocument().getPageCount();
+          const pdfDoc = await docViewer.getDocument().getPDFDoc();
+          for (let i=1; i<=page_num; ++i) {
+            const doc = await PDFNet.PDFDoc.createFromURL('/assets/lorem-ipsum.pdf');
+            const pageCount = await doc.getPageCount();
+            
+            pdfDoc.insertPages(i, doc, 1, pageCount, PDFNet.PDFDoc.InsertFlag.e_none);
+          }
+          const buf = await pdfDoc.saveMemoryBuffer(PDFNet.SDFDoc.SaveOptions.e_linearized);
+          saveAs(new Blob([buf], {type: 'application/pdf'}), "merge_pages.pdf");
+        }, '');
+      });
 
       // Disable all tools
       instance.disableTools();
@@ -77,7 +96,6 @@ export class DrawPanelComponent implements OnChanges, OnInit {
       // see https://www.pdftron.com/documentation/web/guides/ui/apis for the full list of APIs
 
       const annotManager = instance.annotManager;
-      const docViewer = instance.docViewer;
 
       docViewer.on('annotationsLoaded', () => {
         if (this.lastUpdatedDateAnnotation) {
